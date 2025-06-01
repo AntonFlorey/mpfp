@@ -4,6 +4,9 @@
 #include <Eigen/Core>
 #include <Eigen/SparseCore>
 
+#define STRINGIFY(x) #x
+#define MACRO_STRINGIFY(x) STRINGIFY(x)
+
 namespace MakePlanarFacesPlus
 {
 

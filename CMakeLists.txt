@@ -1,22 +1,22 @@
 
 cmake_minimum_required(VERSION 3.22)
-project("makeplanarfacesplus")
+project("mpfp")
 set(CMAKE_CXX_STANDARD 20)
+
+#set (PYBIND11_PYTHON_VERSION "3.11")
 
 if (MSVC)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /bigobj")
 endif (MSVC)
 
-set(APP_SOURCE "${PROJECT_SOURCE_DIR}/src/app")
-set(MODULE_SOURCE "${PROJECT_SOURCE_DIR}/src/module")
-set(EXTERNALS "${PROJECT_SOURCE_DIR}/extern")
-set (PYBIND11_PYTHON_VERSION "3.11")
-
 # pybind11
-add_subdirectory(${EXTERNALS}/pybind11)
+add_subdirectory(extern/pybind11)
 # TinyAD
-add_subdirectory(${EXTERNALS}/TINYAD)
-include_directories("${EXTERNALS}/TINYAD/include")
+add_subdirectory(extern/TINYAD)
+
+# Include dirs
+include_directories("extern/TINYAD/include")
+include_directories("src")
 
 # message(${Eigen3_DIR})
 find_package (Eigen3 3.3 REQUIRED NO_MODULE)
@@ -24,12 +24,7 @@ find_package (Eigen3 3.3 REQUIRED NO_MODULE)
 # module (pybind11)
 pybind11_add_module (
     mpfp
-    ${MODULE_SOURCE}/module.cpp
-)
-
-target_include_directories (
-    mpfp 
-    PRIVATE ${MODULE_SOURCE}
+    src/module.cpp
 )
 
 target_link_libraries(
@@ -39,39 +34,3 @@ target_link_libraries(
 
 target_compile_definitions(mpfp
                            PRIVATE VERSION_INFO=${MPFP_VERSION_INFO})
-
-# # module
-# add_library(
-#     modulelib
-#     ${MODULE_SOURCE}/module.cpp
-# )
-
-# target_include_directories (
-#     modulelib 
-#     PRIVATE ${MODULE_SOURCE}
-# )
-
-# target_link_libraries(
-#     modulelib
-#     PRIVATE Eigen3::Eigen
-#     PRIVATE pybind11::embed
-# )
-
-# # app
-# add_executable (
-#     pybind11app
-#     ${APP_SOURCE}/app.cpp
-# )
-
-# target_include_directories (
-#     pybind11app 
-#     PRIVATE ${APP_SOURCE}
-#     PRIVATE ${MODULE_SOURCE}
-# )
-
-# target_link_libraries(
-#     pybind11app
-#     PRIVATE pybind11::embed
-#     Eigen3::Eigen
-#     modulelib
-# )

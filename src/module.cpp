@@ -220,9 +220,10 @@ namespace MakePlanarFacesPlus
     }
 }
 
-PYBIND11_MODULE(_cpp_mpfp, m)
+PYBIND11_MODULE(mpfp, m)
 {
     m.doc() = "Make Planar Faces Plus: A small geometry processing package for mesh planarization written in C++.";
+
     py::class_<MakePlanarFacesPlus::MakePlanarSettings>(m, "MakePlanarSettings")
         .def(py::init())
         .def_readwrite("optimization_rounds", &MakePlanarFacesPlus::MakePlanarSettings::optimization_rounds)
@@ -233,5 +234,13 @@ PYBIND11_MODULE(_cpp_mpfp, m)
         .def_readwrite("projection_eps", &MakePlanarFacesPlus::MakePlanarSettings::projection_eps)
         .def_readwrite("w_identity", &MakePlanarFacesPlus::MakePlanarSettings::w_identity)
         .def_readwrite("convergence_eps", &MakePlanarFacesPlus::MakePlanarSettings::convergence_eps);
+        
     m.def("make_planar_faces", &MakePlanarFacesPlus::make_planar_faces, "Continuous optimization that makes quad faces planar with minimal geometric loss.");
+
+#ifdef VERSION_INFO
+    m.attr("__version__") = MACRO_STRINGIFY(VERSION_INFO);
+#else
+    m.attr("__version__") = "dev";
+#endif
+
 }
