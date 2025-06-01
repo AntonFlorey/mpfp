@@ -1,7 +1,6 @@
 include README.md LICENSE extern/pybind11/LICENSE extern/TinyAD/LICENSE
 graft extern/pybind11/include
 graft extern/pybind11/tools
-graft 
 graft extern/TinyAD/include
 graft src
 global-include CMakeLists.txt *.cmake

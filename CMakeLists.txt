@@ -12,10 +12,10 @@ endif (MSVC)
 # pybind11
 add_subdirectory(extern/pybind11)
 # TinyAD
-add_subdirectory(extern/TINYAD)
+add_subdirectory(extern/TinyAD)
 
 # Include dirs
-include_directories("extern/TINYAD/include")
+include_directories("extern/TinyAD/include")
 include_directories("src")
 
 # message(${Eigen3_DIR})
