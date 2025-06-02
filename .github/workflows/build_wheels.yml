@@ -34,3 +34,10 @@ jobs:
         with:
           name: cibw-wheels-${{ matrix.os }}-${{ strategy.job-index }}
           path: ./wheelhouse/*.whl
+
+      - name: Test built wheel
+        run: |
+          python3 -m venv venv
+          source venv/bin/activate
+          pip install wheelhouse/*.whl pytest
+          pytest test/
