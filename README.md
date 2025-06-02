@@ -39,4 +39,4 @@ The function provided by this module aims to make each face of a mesh planar. It
 
 You can control the strength of this shape preservation objective via the `closeness_weight` and `min_closeness_weight` parameter. The algorithm will interpolate between the two while optimizing. If you struggle to get decent results, try increasing the `closeness_weight` and the number of optimization rounds.
 
-The algorithm will always try to optimize the entire mesh. By providing the index list `fixed_vertices`, all selected vertices will not be ignored by the optimizer. This may be useful when you want to preserve certain features.
+The algorithm will always try to optimize the entire mesh. By providing the index list `fixed_vertices`, all selected vertices will be ignored by the optimizer. This may be useful when you want to preserve certain features.

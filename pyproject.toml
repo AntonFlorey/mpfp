@@ -6,3 +6,11 @@ requires = [
     "cmake>=3.22",
 ]
 build-backend = "setuptools.build_meta"
+
+# Install Eigen on linux
+[tool.cibuildwheel.linux]
+before-all = "apt install libeigen3-dev"
+
+# Install Eigen on macos
+[tool.cibuildwheel.macos]
+before-all =  "brew install eigen"
