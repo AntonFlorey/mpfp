@@ -10,7 +10,10 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /bigobj")
 endif (MSVC)
 
 # Eigen
-find_package (Eigen3 REQUIRED NO_MODULE)
+add_library(Eigen3::Eigen INTERFACE IMPORTED)
+set_target_properties(Eigen3::Eigen PROPERTIES
+    INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_CURRENT_SOURCE_DIR}/extern/eigen"
+)
 # pybind11
 add_subdirectory(extern/pybind11)
 # TinyAD
