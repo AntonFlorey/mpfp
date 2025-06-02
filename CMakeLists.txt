@@ -9,6 +9,8 @@ if (MSVC)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /bigobj")
 endif (MSVC)
 
+# Eigen
+find_package (Eigen3 REQUIRED NO_MODULE)
 # pybind11
 add_subdirectory(extern/pybind11)
 # TinyAD
@@ -19,7 +21,6 @@ include_directories("extern/TinyAD/include")
 include_directories("src")
 
 # message(${Eigen3_DIR})
-find_package (Eigen3 3.3 REQUIRED NO_MODULE)
 
 # module (pybind11)
 pybind11_add_module (
