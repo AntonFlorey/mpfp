@@ -9,7 +9,7 @@ build-backend = "setuptools.build_meta"
 
 # Install Eigen on linux
 [tool.cibuildwheel.linux]
-before-all = "apt install libeigen3-dev"
+before-all = "sudo apt-get install libeigen3-dev"
 
 # Install Eigen on macos
 [tool.cibuildwheel.macos]
