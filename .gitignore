@@ -205,3 +205,4 @@ cython_debug/
 
 # cibuildwheel
 wheelhouse
+outdated_wheels

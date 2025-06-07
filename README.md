@@ -15,8 +15,8 @@ fixed_vertices = [0,1,2]
 # here is a list of all available settings (with default values):
 opt_settings = MakePlanarSettings()
 opt_settings.optimization_rounds = 100
-opt_settings.max_iterations = 100
-opt_settings.closeness_weight = 10
+opt_settings.max_iterations = 50
+opt_settings.closeness_weight = 1
 opt_settings.min_closeness_weight = 0.0
 opt_settings.verbose = True
 opt_settings.projection_eps = 1e-16

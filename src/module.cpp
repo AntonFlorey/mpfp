@@ -117,22 +117,13 @@ namespace MakePlanarFacesPlus
         {
             // Evaluate element using either double or TinyAD::Double
             using T = TINYAD_SCALAR_TYPE(element);
-
+      
             const std::array<int, 4>& current_vertex_indices = planarity_objective_indices[element.handle];
-            std::vector<Eigen::Vector3<T>> normalized_edges =
-            {
-                (element.variables(current_vertex_indices[1]) - element.variables(current_vertex_indices[0])).normalized(),
-                (element.variables(current_vertex_indices[2]) - element.variables(current_vertex_indices[1])).normalized(),
-                (element.variables(current_vertex_indices[3]) - element.variables(current_vertex_indices[2])).normalized(),
-                (element.variables(current_vertex_indices[0]) - element.variables(current_vertex_indices[3])).normalized()
-            };
-            T summed_determinants = 0.0;
-            for (size_t i = 0; i < 4; i++)
-            {
-                summed_determinants += sqr(TinyAD::col_mat(normalized_edges[i], normalized_edges[(i + 1) % 4], normalized_edges[(i + 2) % 4]).determinant());
-            }
-
-            return summed_determinants / (double)n_planarity_objectives;
+            Eigen::Vector3<T> edge_a = (element.variables(current_vertex_indices[1]) - element.variables(current_vertex_indices[0])).normalized();
+            Eigen::Vector3<T> edge_b = (element.variables(current_vertex_indices[2]) - element.variables(current_vertex_indices[1])).normalized();
+            Eigen::Vector3<T> edge_c = (element.variables(current_vertex_indices[3]) - element.variables(current_vertex_indices[2])).normalized();
+            
+            return sqr(TinyAD::col_mat(edge_a, edge_b, edge_c).determinant()) / (double)n_planarity_objectives;
         });
 
         // Init variables (scale the mesh to have a unit volume bounding box)
