@@ -193,8 +193,10 @@ namespace MakePlanarFacesPlus
                 }
                 double new_f = func.eval(x);
                 if (std::abs(f - new_f) < settings.convergence_eps)
+                {
                     if (settings.verbose) TINYAD_INFO("Function improvement below convergence eps. Stopping early.");
                     break;
+                }        
             }
             double curr_f = func.eval(x);
             if (settings.verbose) TINYAD_INFO("Energy | Closeness Weight after round " << opt_round << ": " << curr_f << " | " << closeness_weight);

@@ -16,17 +16,17 @@ using Triplet = Eigen::Triplet<double>;
 
 struct MakePlanarSettings
 {
-	int optimization_rounds = 100;
-	int max_iterations = 50;
+	int optimization_rounds = 50;
+	int max_iterations = 10;
 
 	// Optimization settings
-	double initial_closeness_weight = 1.0;
+	double initial_closeness_weight = 5.0;
 	double min_closeness_weight = 0.0;
 
 	// Optimizer settings
 	bool verbose = true;
-	double projection_eps = 1e-16;
-	double w_identity = 1e-16;
+	double projection_eps = 1e-9;
+	double w_identity = 1e-9;
 	double convergence_eps = 1e-16;
 };
 

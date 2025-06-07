@@ -16,12 +16,12 @@ def test_face_optimization():
     # here is a list of all available settings (with default values):
     opt_settings = mpfp.MakePlanarSettings()
     opt_settings.optimization_rounds = 100
-    opt_settings.max_iterations = 50
-    opt_settings.closeness_weight = 1
+    opt_settings.max_iterations = 10
+    opt_settings.closeness_weight = 2
     opt_settings.min_closeness_weight = 0.0
     opt_settings.verbose = False
-    opt_settings.projection_eps = 1e-16
-    opt_settings.w_identity = 1e-16
+    opt_settings.projection_eps = 1e-9
+    opt_settings.w_identity = 1e-9
     opt_settings.convergence_eps = 1e-16
     # optimize
     optimized_vertices = mpfp.make_planar_faces(vertices, faces, fixed_vertices, opt_settings)
