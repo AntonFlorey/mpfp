@@ -37,6 +37,25 @@ You provide your mesh to the `make_planar_faces` function via the two parameters
 ## Details
 The function provided by this module aims to make each face of a mesh planar. It solves a global optimization problem in order to make faces planar while preserving the objects shape as much as possible.
 
-You can control the strength of this shape preservation objective via the `closeness_weight` and `min_closeness_weight` parameter. The algorithm will interpolate between the two while optimizing. If you struggle to get decent results, try increasing the `closeness_weight` and the number of optimization rounds.
+You can control the strength of this shape preservation objective via the `closeness_weight` and `min_closeness_weight` parameter. The algorithm will interpolate between the two while optimizing. 
 
-The algorithm will always try to optimize the entire mesh. By providing the index list `fixed_vertices`, all selected vertices will be ignored by the optimizer. This may be useful when you want to preserve certain features.
+How fast the shape preservation weight decays is controlled by the `optimization_rounds` setting. If set to 2, the first round will use the initial weight, the second round the target weight. More rounds will add more steps inbetween these two values, leading to a more graceful descent. 
+
+The `max_iterations` setting determines how many optimization steps are performed per round (so for one weight value). A round will be stopped early if the objective funtion improvement falls below the `convergence_eps` threshold. 
+
+Here is an overview of the optimization process:
+
+```python
+# python pseudo-code of the optimization process
+shape_weight = "closeness_weight"
+for opt_round in range("optimization_rounds"):
+    for opt_step in range("max_iterations"):
+        do_optimization_step()
+        if improvement < "convergence_eps":
+            break
+    # the decay factor is chosen such that
+    # shape_weight = "Tmin_closeness_weight" in the last round
+    shape_weight *= decay_factor
+```
+
+The algorithm will always try to optimize the entire mesh. By providing a list of pinned vertx indices, all selected vertices will not be affected by the operator. This may be useful when you want to preserve certain features.

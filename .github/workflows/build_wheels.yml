@@ -32,9 +32,9 @@ jobs:
         id: macosdeployment
         run: |
           if [[ "${{ matrix.os }}" == "macos-13" ]]; then
-            echo "macosx_deploy_target=10.13" >> $GITHUB_OUTPUT
+            echo "macosx_deploy_target=13.0" >> $GITHUB_OUTPUT
           else
-            echo "macosx_deploy_target=11.0" >> $GITHUB_OUTPUT
+            echo "macosx_deploy_target=14.0" >> $GITHUB_OUTPUT
           fi
 
       - name: Build wheels
