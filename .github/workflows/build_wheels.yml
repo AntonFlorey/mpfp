@@ -31,7 +31,7 @@ jobs:
         uses: pypa/cibuildwheel@v2.23.3
         env:
           CIBW_BUILD: "cp311-*"
-          MACOSX_DEPLOYMENT_TARGET: " 14.0"
+          MACOSX_DEPLOYMENT_TARGET: "14.0"
           # CIBW_ENVIRONMENT_MACOS: >
           #   CXXFLAGS='-Xpreprocessor -fopenmp -I${{ steps.libomp.outputs.prefix }}/include'
           #   LDFLAGS='-L${{ steps.libomp.outputs.prefix }}/lib -lomp'
