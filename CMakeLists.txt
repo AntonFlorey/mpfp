@@ -11,7 +11,7 @@ endif (MSVC)
 
 # OpenMP
 if (NOT TARGET OpenMP::OpenMP_CXX)
-    find_package(OpenMP)
+    find_package(OpenMP REQUIRED)
 endif()
 
 # Eigen

@@ -20,15 +20,20 @@ jobs:
       
       - name: Set up OpenMP env (macOS)
         if: runner.os == 'macOS'
-        run: |
-          echo "CXXFLAGS=-Xpreprocessor -fopenmp -I$(brew --prefix libomp)/include" >> $GITHUB_ENV
-          echo "LDFLAGS=-L$(brew --prefix libomp)/lib -lomp" >> $GITHUB_ENV
+        run: brew install libomp
 
       - name: Build wheels
         uses: pypa/cibuildwheel@v2.23.3
         env:
           CIBW_BUILD: "cp311-*"
           MACOSX_DEPLOYMENT_TARGET: "10.13"
+          CIBW_ENVIRONMENT_MACOS: >
+            CXXFLAGS='-Xpreprocessor -fopenmp -I$(brew --prefix libomp)/include'
+            LDFLAGS='-L$(brew --prefix libomp)/lib -lomp'
+          CIBW_BEFORE_ALL_LINUX: >
+            yum install -y libgomp
+          CIBW_ENVIRONMENT_LINUX: >
+            CXXFLAGS='-fopenmp' LDFLAGS='-fopenmp'
           CIBW_TEST_REQUIRES: "pytest"
           CIBW_TEST_COMMAND: "pytest {project}/test/"
 
