@@ -23,17 +23,17 @@ jobs:
         id: libomp
         run: |
           brew install libomp
-          echo "prefix=/opt/homebrew/opt/libomp" >> $GITHUB_OUTPUT
-          echo "Path prefix of libomp $(brew --prefix libomp)"
+          echo "LIBOMP_PREFIX=$(brew --prefix libomp)" >> $GITHUB_ENV
+          echo "Path prefix of libomp: $(brew --prefix libomp)"
 
       - name: Build wheels
         uses: pypa/cibuildwheel@v2.23.3
         env:
           CIBW_BUILD: "cp311-*"
           MACOSX_DEPLOYMENT_TARGET: "10.13"
-          CIBW_ENVIRONMENT_MACOS: >
-            CXXFLAGS='-Xpreprocessor -fopenmp -I${{ steps.libomp.outputs.prefix }}/include'
-            LDFLAGS='-L${{ steps.libomp.outputs.prefix }}/lib -lomp'
+          # CIBW_ENVIRONMENT_MACOS: >
+          #   CXXFLAGS='-Xpreprocessor -fopenmp -I${{ steps.libomp.outputs.prefix }}/include'
+          #   LDFLAGS='-L${{ steps.libomp.outputs.prefix }}/lib -lomp'
           # CIBW_BEFORE_ALL_LINUX: >
           #   yum install -y libgomp
           # CIBW_ENVIRONMENT_LINUX: >

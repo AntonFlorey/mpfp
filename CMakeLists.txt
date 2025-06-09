@@ -11,6 +11,13 @@ endif (MSVC)
 
 # OpenMP
 if (NOT TARGET OpenMP::OpenMP_CXX)
+    if(APPLE)
+        set(OpenMP_C_FLAGS "-Xpreprocessor -fopenmp -I${LIBOMP_PREFIX}/include")
+        set(OpenMP_C_LIB_NAMES "omp")
+        set(OpenMP_CXX_FLAGS "-Xpreprocessor -fopenmp -I${LIBOMP_PREFIX}/include")
+        set(OpenMP_CXX_LIB_NAMES "omp")
+        set(OpenMP_omp_LIBRARY "${LIBOMP_PREFIX}/lib/libomp.dylib")
+    endif()
     find_package(OpenMP REQUIRED)
 endif()
 

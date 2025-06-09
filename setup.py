@@ -98,6 +98,9 @@ class CMakeBuild(build_ext):
                 build_args += ["--config", cfg]
 
         if sys.platform.startswith("darwin"):
+            # Set Libomp prefix
+            libomp_prefix = os.environ.get("LIBOMP_PREFIX", "/opt/homebrew/opt/libomp")  # fallback
+            cmake_args += ["-DLIBOMP_PREFIX=" + libomp_prefix]
             # Cross-compile support for macOS - respect ARCHFLAGS if set
             archs = re.findall(r"-arch (\S+)", os.environ.get("ARCHFLAGS", ""))
             if archs:
