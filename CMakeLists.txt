@@ -9,6 +9,11 @@ if (MSVC)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /bigobj")
 endif (MSVC)
 
+# OpenMP
+if (NOT TARGET OpenMP::OpenMP_CXX)
+    find_package(OpenMP REQUIRED)
+endif()
+
 # Eigen
 add_library(Eigen3::Eigen INTERFACE IMPORTED)
 set_target_properties(Eigen3::Eigen PROPERTIES
@@ -34,21 +39,8 @@ pybind11_add_module (
 target_link_libraries(
     mpfp
     PRIVATE Eigen3::Eigen
+    PRIVATE OpenMP::OpenMP_CXX
 )
-
-if (NOT TARGET OpenMP::OpenMP_CXX)
-    if(APPLE)
-        # Homebrew installs libomp here (keg-only)
-        set(OpenMP_C_FLAGS "-Xpreprocessor -fopenmp -I/opt/homebrew/opt/libomp/include")
-        set(OpenMP_C_LIB_NAMES "omp")
-        set(OpenMP_CXX_FLAGS "-Xpreprocessor -fopenmp -I/opt/homebrew/opt/libomp/include")
-        set(OpenMP_CXX_LIB_NAMES "omp")
-        set(OpenMP_omp_LIBRARY /opt/homebrew/opt/libomp/lib/libomp.dylib)
-    endif()
-    find_package(OpenMP REQUIRED)
-endif()
-
-target_link_libraries(mpfp PRIVATE OpenMP::OpenMP_CXX)
 
 target_compile_definitions(mpfp
                            PRIVATE VERSION_INFO=${MPFP_VERSION_INFO})
