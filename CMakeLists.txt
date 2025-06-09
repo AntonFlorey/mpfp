@@ -36,5 +36,19 @@ target_link_libraries(
     PRIVATE Eigen3::Eigen
 )
 
+if (NOT TARGET OpenMP::OpenMP_CXX)
+    if(APPLE)
+        # Homebrew installs libomp here (keg-only)
+        set(OpenMP_C_FLAGS "-Xpreprocessor -fopenmp -I/opt/homebrew/opt/libomp/include")
+        set(OpenMP_C_LIB_NAMES "omp")
+        set(OpenMP_CXX_FLAGS "-Xpreprocessor -fopenmp -I/opt/homebrew/opt/libomp/include")
+        set(OpenMP_CXX_LIB_NAMES "omp")
+        set(OpenMP_omp_LIBRARY /opt/homebrew/opt/libomp/lib/libomp.dylib)
+    endif()
+    find_package(OpenMP REQUIRED)
+endif()
+
+target_link_libraries(mpfp PRIVATE OpenMP::OpenMP_CXX)
+
 target_compile_definitions(mpfp
                            PRIVATE VERSION_INFO=${MPFP_VERSION_INFO})
