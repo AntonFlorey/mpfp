@@ -9,7 +9,7 @@ jobs:
     strategy:
       matrix:
         # macos-13 is an intel runner, macos-14 is apple silicon
-        os: [windows-latest, ubuntu-latest, ubuntu-24.04-arm] #, macos-13, macos-14]
+        os: [windows-latest, ubuntu-latest, ubuntu-24.04-arm, macos-13, macos-14]
         python-version: ['3.11']
 
     steps:
@@ -20,9 +20,10 @@ jobs:
       
       - name: Set up OpenMP env (macOS)
         if: runner.os == 'macOS'
+        id: libomp
         run: |
           brew install libomp
-          echo "LIBOMP_PREFIX=$(brew --prefix libomp)" >> $GITHUB_ENV
+          echo "prefix=/opt/homebrew/opt/libomp" >> $GITHUB_OUTPUT
           echo "Path prefix of libomp $(brew --prefix libomp)"
 
       - name: Build wheels
@@ -31,12 +32,12 @@ jobs:
           CIBW_BUILD: "cp311-*"
           MACOSX_DEPLOYMENT_TARGET: "10.13"
           CIBW_ENVIRONMENT_MACOS: >
-            CXXFLAGS='-Xpreprocessor -fopenmp -I${LIBOMP_PREFIX}/include'
-            LDFLAGS='-L${LIBOMP_PREFIX}/lib -lomp'
-          CIBW_BEFORE_ALL_LINUX: >
-            yum install -y libgomp
-          CIBW_ENVIRONMENT_LINUX: >
-            CXXFLAGS='-fopenmp' LDFLAGS='-fopenmp'
+            CXXFLAGS='-Xpreprocessor -fopenmp -I${{ steps.libomp.outputs.prefix }}/include'
+            LDFLAGS='-L${{ steps.libomp.outputs.prefix }}/lib -lomp'
+          # CIBW_BEFORE_ALL_LINUX: >
+          #   yum install -y libgomp
+          # CIBW_ENVIRONMENT_LINUX: >
+          #   CXXFLAGS='-fopenmp' LDFLAGS='-fopenmp'
           CIBW_TEST_REQUIRES: "pytest"
           CIBW_TEST_COMMAND: "pytest {project}/test/"
 
