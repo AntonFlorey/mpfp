@@ -11,7 +11,7 @@ endif (MSVC)
 
 # OpenMP
 if (NOT TARGET OpenMP::OpenMP_CXX)
-    find_package(OpenMP REQUIRED)
+    find_package(OpenMP)
 endif()
 
 # Eigen
@@ -41,6 +41,13 @@ target_link_libraries(
     PRIVATE Eigen3::Eigen
     PRIVATE OpenMP::OpenMP_CXX
 )
+
+if (TARGET OpenMP::OpenMP_CXX)
+    target_link_libraries(
+        mpfp
+        PRIVATE OpenMP::OpenMP_CXX
+    )
+endif()
 
 target_compile_definitions(mpfp
                            PRIVATE VERSION_INFO=${MPFP_VERSION_INFO})
