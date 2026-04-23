@@ -23,6 +23,9 @@ jobs:
         id: libomp
         run: |
           brew install libomp
+          echo "CFLAGS=-Xpreprocessor -fopenmp -I$(brew --prefix libomp)/include" >> $GITHUB_ENV
+          echo "CXXFLAGS=-Xpreprocessor -fopenmp -I$(brew --prefix libomp)/include" >> $GITHUB_ENV
+          echo "LDFLAGS=-L$(brew --prefix libomp)/lib -lomp" >> $GITHUB_ENV
           echo "LIBOMP_PREFIX=$(brew --prefix libomp)" >> $GITHUB_ENV
           echo "Path prefix of libomp: $(brew --prefix libomp)"
       
@@ -40,11 +43,11 @@ jobs:
         uses: pypa/cibuildwheel@v2.23.3
         env:
           CIBW_BUILD: "cp313-*"
-          CIBW_ENVIRONMENT_MACOS: >
-            CFLAGS="-Xpreprocessor -fopenmp -I$(brew --prefix libomp)/include"
-            CXXFLAGS="-Xpreprocessor -fopenmp -I$(brew --prefix libomp)/include"
-            LDFLAGS="-L$(brew --prefix libomp)/lib -lomp"
-            OpenMP_ROOT=$(brew --prefix libomp)
+          # CIBW_ENVIRONMENT_MACOS: >
+          #   CFLAGS="-Xpreprocessor -fopenmp -I$(brew --prefix libomp)/include"
+          #   CXXFLAGS="-Xpreprocessor -fopenmp -I$(brew --prefix libomp)/include"
+          #   LDFLAGS="-L$(brew --prefix libomp)/lib -lomp"
+          #   OpenMP_ROOT=$(brew --prefix libomp)
           MACOSX_DEPLOYMENT_TARGET: ${{ steps.macosdeployment.outputs.macosx_deploy_target }}
           CIBW_TEST_REQUIRES: "pytest"
           CIBW_TEST_COMMAND: "pytest {project}/test/"
