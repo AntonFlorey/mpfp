@@ -41,10 +41,12 @@ jobs:
         uses: pypa/cibuildwheel@v2.23.3
         env:
           CIBW_BUILD: "cp313-*"
+          CIBW_ENVIRONMENT_MACOS: >
+            OpenMP_ROOT=$(brew --prefix libomp)
           MACOSX_DEPLOYMENT_TARGET: ${{ steps.macosdeployment.outputs.macosx_deploy_target }}
           CIBW_TEST_REQUIRES: "pytest"
           CIBW_TEST_COMMAND: "pytest {project}/test/"
-          CIBW_ARCHS_MACOS: "x86_64 arm64"
+          CIBW_ARCHS_MACOS: "auto"
 
       - uses: actions/upload-artifact@v4
         with:
