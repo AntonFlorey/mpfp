@@ -20,7 +20,7 @@ endif (MSVC)
 #     endif()
 #     find_package(OpenMP REQUIRED)
 # endif()
-find_package(OpenMP REQUIRED)
+find_package(OpenMP COMPONENTS CXX REQUIRED)
 
 # Eigen
 add_library(Eigen3::Eigen INTERFACE IMPORTED)
