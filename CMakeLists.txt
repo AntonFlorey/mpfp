@@ -10,17 +10,13 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /bigobj")
 endif (MSVC)
 
 # OpenMP
-# if (NOT TARGET OpenMP::OpenMP_CXX)
-#     if(APPLE)
-#         set(OpenMP_C_FLAGS "-Xpreprocessor -fopenmp -I${LIBOMP_PREFIX}/include")
-#         set(OpenMP_C_LIB_NAMES "omp")
-#         set(OpenMP_CXX_FLAGS "-Xpreprocessor -fopenmp -I${LIBOMP_PREFIX}/include")
-#         set(OpenMP_CXX_LIB_NAMES "omp")
-#         set(OpenMP_omp_LIBRARY "${LIBOMP_PREFIX}/lib/libomp.dylib")
-#     endif()
-#     find_package(OpenMP REQUIRED)
-# endif()
-find_package(OpenMP COMPONENTS CXX REQUIRED)
+if(APPLE)
+    if(DEFINED ENV{LIBOMP_PREFIX})
+        set(OpenMP_ROOT $ENV{LIBOMP_PREFIX})
+    endif()
+endif()
+
+find_package(OpenMP REQUIRED)
 
 # Eigen
 add_library(Eigen3::Eigen INTERFACE IMPORTED)
@@ -49,13 +45,6 @@ target_link_libraries(
     PRIVATE Eigen3::Eigen
     PRIVATE OpenMP::OpenMP_CXX
 )
-
-if (TARGET OpenMP::OpenMP_CXX)
-    target_link_libraries(
-        mpfp
-        PRIVATE OpenMP::OpenMP_CXX
-    )
-endif()
 
 target_compile_definitions(mpfp
                            PRIVATE VERSION_INFO=${MPFP_VERSION_INFO})

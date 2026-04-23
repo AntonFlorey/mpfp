@@ -23,9 +23,6 @@ jobs:
         id: libomp
         run: |
           brew install libomp
-          echo "CFLAGS=-Xpreprocessor -fopenmp -I$(brew --prefix libomp)/include" >> $GITHUB_ENV
-          echo "CXXFLAGS=-Xpreprocessor -fopenmp -I$(brew --prefix libomp)/include" >> $GITHUB_ENV
-          echo "LDFLAGS=-L$(brew --prefix libomp)/lib -lomp" >> $GITHUB_ENV
           echo "LIBOMP_PREFIX=$(brew --prefix libomp)" >> $GITHUB_ENV
           echo "Path prefix of libomp: $(brew --prefix libomp)"
       
@@ -43,18 +40,18 @@ jobs:
         uses: pypa/cibuildwheel@v2.23.3
         env:
           CIBW_BUILD: "cp313-*"
-          CIBW_ENVIRONMENT_MACOS: >
-            CFLAGS="-Xpreprocessor -fopenmp -I/opt/homebrew/opt/libomp/include -I/usr/local/opt/libomp/include"
-            CXXFLAGS="-Xpreprocessor -fopenmp -I/opt/homebrew/opt/libomp/include -I/usr/local/opt/libomp/include"
-            LDFLAGS="-L/opt/homebrew/opt/libomp/lib -L/usr/local/opt/libomp/lib -lomp"
-          CIBW_BEFORE_BUILD_MACOS: >
-            echo "CFLAGS=$CFLAGS"
-            echo "CXXFLAGS=$CXXFLAGS"
-            echo "LDFLAGS=$LDFLAGS"
+          # CIBW_ENVIRONMENT_MACOS: >
+          #   CFLAGS="-Xpreprocessor -fopenmp -I/opt/homebrew/opt/libomp/include -I/usr/local/opt/libomp/include"
+          #   CXXFLAGS="-Xpreprocessor -fopenmp -I/opt/homebrew/opt/libomp/include -I/usr/local/opt/libomp/include"
+          #   LDFLAGS="-L/opt/homebrew/opt/libomp/lib -L/usr/local/opt/libomp/lib -lomp"
+          # CIBW_BEFORE_BUILD_MACOS: >
+          #   echo "CFLAGS=$CFLAGS"
+          #   echo "CXXFLAGS=$CXXFLAGS"
+          #   echo "LDFLAGS=$LDFLAGS"
           MACOSX_DEPLOYMENT_TARGET: ${{ steps.macosdeployment.outputs.macosx_deploy_target }}
           CIBW_TEST_REQUIRES: "pytest"
           CIBW_TEST_COMMAND: "pytest {project}/test/"
-          CIBW_ARCHS_MACOS: "x86_64 arm64"
+          CIBW_ARCHS_MACOS: "x86_64" # arm64"
 
       - uses: actions/upload-artifact@v4
         with:
