@@ -43,11 +43,14 @@ jobs:
         uses: pypa/cibuildwheel@v2.23.3
         env:
           CIBW_BUILD: "cp313-*"
-          # CIBW_ENVIRONMENT_MACOS: >
-          #   CFLAGS="-Xpreprocessor -fopenmp -I$(brew --prefix libomp)/include"
-          #   CXXFLAGS="-Xpreprocessor -fopenmp -I$(brew --prefix libomp)/include"
-          #   LDFLAGS="-L$(brew --prefix libomp)/lib -lomp"
-          #   OpenMP_ROOT=$(brew --prefix libomp)
+          CIBW_ENVIRONMENT_MACOS: >
+            CFLAGS="-Xpreprocessor -fopenmp -I/opt/homebrew/opt/libomp/include -I/usr/local/opt/libomp/include"
+            CXXFLAGS="-Xpreprocessor -fopenmp -I/opt/homebrew/opt/libomp/include -I/usr/local/opt/libomp/include"
+            LDFLAGS="-L/opt/homebrew/opt/libomp/lib -L/usr/local/opt/libomp/lib -lomp"
+          CIBW_BEFORE_BUILD_MACOS: >
+            echo "CFLAGS=$CFLAGS"
+            echo "CXXFLAGS=$CXXFLAGS"
+            echo "LDFLAGS=$LDFLAGS"
           MACOSX_DEPLOYMENT_TARGET: ${{ steps.macosdeployment.outputs.macosx_deploy_target }}
           CIBW_TEST_REQUIRES: "pytest"
           CIBW_TEST_COMMAND: "pytest {project}/test/"
