@@ -9,7 +9,6 @@ jobs:
     continue-on-error: true
     strategy:
       matrix:
-        # macos-13 is an intel runner, macos-14 is apple silicon
         os: [macos-15, macos-14, windows-latest, ubuntu-latest, ubuntu-24.04-arm]
         python-version: ['3.13']
 
@@ -46,7 +45,7 @@ jobs:
           MACOSX_DEPLOYMENT_TARGET: ${{ steps.macosdeployment.outputs.macosx_deploy_target }}
           CIBW_TEST_REQUIRES: "pytest"
           CIBW_TEST_COMMAND: "pytest {project}/test/"
-          CIBW_ARCHS_MACOS: "auto"
+          CIBW_ARCHS_MACOS: "x86_64 arm64"
 
       - uses: actions/upload-artifact@v4
         with:
